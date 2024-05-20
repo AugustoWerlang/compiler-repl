@@ -1,14 +1,16 @@
 import fs from "node:fs/promises";
-
+import path from "path";
 import Repl from "./Repl";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const exampleFilesList = await fs.readdir("./examples");
+  const examplesDir = path.join(process.cwd(), "public", "examples");
+  const exampleFilesList = await fs.readdir(examplesDir);
   const exampleFiles: Record<string, string> = {};
   for (const file of exampleFilesList) {
-    exampleFiles[file] = await fs.readFile(`./examples/${file}`, "utf-8");
+    const filePath = path.join(examplesDir, file);
+    exampleFiles[file] = await fs.readFile(filePath, "utf-8");
   }
 
   return (
